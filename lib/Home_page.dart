@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'routes.dart';
 
@@ -36,74 +37,92 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 10),
               Text(
                 "Welcome to Scholar's Sync",
-                style: TextStyle(
-                  fontFamily: 'Maven Pro',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
+                style: GoogleFonts.nunito(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
                   color: Colors.black,
+                  letterSpacing: -0.5,
                 ),
               ),
               SizedBox(height: 13),
               Text(
-                  "Unlock Your Potential, One Lesson at a Time.",
-                style: TextStyle(
-                  fontFamily: 'Maven Pro',
+                "Unlock Your Potential, One Lesson at a Time.",
+                style: GoogleFonts.nunito(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
+                    letterSpacing: -0.5,
                 ),
-
               ),
 
+
               SizedBox(height: 30),
-              InkWell(
-                onTap: () {
+              ElevatedButton(
+                onPressed: () {
                   Get.toNamed(MyRoutes.StudentRoute);
                 },
-                child: Container(
-                  width: 300,
-                  height: 48,
-                  decoration: BoxDecoration(
-                      color: Color(0xFFFFD700),
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  backgroundColor: Color(0xFFFFD700),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(color: Colors.black),
                   ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Continue as a Student',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-
+                  elevation: 0, // Removed shadow effect
+                  padding: EdgeInsets.all(10), // Added padding
+                ),
+                child: SizedBox(
+                  width: 279,
+                  height: 30,
+                  child: Center(
+                    child: Text(
+                      'Continue as a Student',
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                          letterSpacing: -0.5
+                      ),
                     ),
                   ),
                 ),
               ),
+
+
+
+
               SizedBox(height: 15),
               InkWell(
                 onTap: () {
-                   Get.toNamed(MyRoutes.TeacherRoute);
+                  Get.toNamed(MyRoutes.TeacherRoute);
                 },
                 child: Container(
                   width: 300,
                   height: 48,
                   decoration: BoxDecoration(
                     color: Colors.black,
-                    border: Border.all(color: Colors.black),
+                    border: Border.all(color: Color(0xFFFFD700)),
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        offset: Offset(0, 3),
+                        blurRadius: 6,
+                        spreadRadius: 0,
+                      ),
+                    ],
                   ),
                   alignment: Alignment.center,
                   child: Text(
                     'Continue as a Teacher',
-                    style: TextStyle(
+                    style: GoogleFonts.nunito(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: Colors.white, letterSpacing: -0.5
                     ),
                   ),
                 ),
               ),
+
               SizedBox(height: 10),
             ],
           ),

@@ -7,7 +7,13 @@ class MyRoutes {
   static String StuProfileRoute = "/StuProfilePage";
   static String TeacherProfileRoute = "/TeacherProfilePage";
   static String ProfilePageRoute = "/ProfilePage";
-
+  static String TeacherPictureRoute = "/TeacherProfilePic";
+  static String GettingStartedRoute = "/GettingStarted";
+  static String GettingStartedTeacherRoute = "/GettingStartedTeacher";
+  static String JustThereRoute = "/JustThere";
+  static String SubjectRoute = "Subject";
+  static String JustThereTeacherRoute = "/JustThereTeacher";
+  static String FinishSetupRoute = "FinishSetup";
 
 
 

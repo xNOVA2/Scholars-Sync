@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scholars_sync/CreateAccount.dart';
+import 'package:scholars_sync/FinalStep.dart';
+import 'package:scholars_sync/FinishSetup.dart';
+import 'package:scholars_sync/GettingStartTeacher.dart';
+import 'package:scholars_sync/GettingStarted.dart';
+import 'package:scholars_sync/JustThere.dart';
 import 'package:scholars_sync/routes.dart';
 import 'CreateAccountTeacher.dart';
+import 'JustThereT.dart';
 import 'PicturePage.dart';
 import 'StudentPage.dart';
 import 'TeacherPage.dart';
+import 'TeacherProfilePic.dart';
 import 'home_page.dart';
 import 'splashscreen.dart';
 
@@ -31,9 +38,14 @@ class MyApp extends StatelessWidget {
         GetPage(name: MyRoutes.CreateAccountRoute, page: () => CreateAccountPage() ),
         GetPage(name: MyRoutes.CreateAccountTeacherRoute, page: () => CreateAccountTeacher()),
         GetPage(name: MyRoutes.ProfilePageRoute, page: () => ProfilePage()),
+        GetPage(name: MyRoutes.TeacherPictureRoute, page: () => TeacherProfilePic()),
+        GetPage(name: MyRoutes.GettingStartedRoute, page: ()=> GettingStarted()),
+        GetPage(name: MyRoutes.GettingStartedTeacherRoute, page: ()=> GettingStartedTeacher()),
+        GetPage(name: MyRoutes.JustThereRoute, page: ()=> JustThere()),
+        GetPage(name: MyRoutes.JustThereTeacherRoute, page: ()=> JustThereTeacher()),
+        //GetPage(name: MyRoutes.SubjectRoute, page: ()=> Subject()),
+        //GetPage(name: MyRoutes.FinishSetupRoute, page: ()=> FinishSetup())
 
-        //GetPage(name: MyRoutes.stuProfileRoute, page: () => StuProfileRoute()),
-        //GetPage(name: MyRoutes.teacherProfileRoute, page: () => TeacherProfileRoute()),
       ],
     );
   }

@@ -1,197 +1,269 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:scholars_sync/CreateAccount.dart';
 
 import 'CreateAccountTeacher.dart';
 
 class TeacherForm extends StatefulWidget {
   @override
-  _TeacherLoginPageState createState() => _TeacherLoginPageState();
+  _TeacherFormState createState() => _TeacherFormState();
 }
 
-class _TeacherLoginPageState extends State<TeacherForm> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+class _TeacherFormState extends State<TeacherForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false;
 
-  final _passwordVisible = false.obs;
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Form submitted successfully')),
+      );
+    }
+  }
+
+  String? _validateEmail(String? value) {
+    if (value!.isEmpty) {
+      return 'Please enter an email';
+    }
+    RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegExp.hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value!.isEmpty) {
+      return 'Please enter a password';
+    }
+
+    return null;
+  }
+
+  InputDecoration _buildInputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      hintText: label,
+      prefixIcon: Icon(icon),
+      suffixIcon: label == 'Password'
+          ? IconButton(
+        icon: Icon(
+          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+        ),
+        onPressed: () {
+          setState(() {
+            _isPasswordVisible = !_isPasswordVisible;
+          });
+        },
+      )
+          : null,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
-      appBar: null,
-      body: SafeArea(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFCFFD4),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(""),
+      ),
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: SingleChildScrollView(
+          padding: const EdgeInsets.all(14.0),
+          child: Form(
+            key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/1.png',
+                      height: 120,
+                      width: 300,
+                    ),
+                  ],
                 ),
-                Image.asset(
-                  'assets/images/1.png',
-                  height: 200,
-                  width: 200,
-                ),
-
                 Text(
-                  'Login to your account',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  "Login to your Account",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.nunito(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 10),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFFFCFFD4),
+                Text(
+                  "Please enter your login credentials",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.nunito(
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextFormField(
-                            controller: emailController,
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              hintText: 'Enter your email',
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your email';
-                              } else if (!GetUtils.isEmail(value)) {
-                                return 'Please enter a valid email';
-                              }
-                              return null;
-                            },
+                ),
+
+                SizedBox(height: 30.0),
+                Text(
+                  "Email Address",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.nunito(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    filled: true, // Set to true to fill the background
+                    fillColor: Colors.white, // Set the background color
+                    hintText: 'Enter your email',
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.black87, width: 2.0), // Adjust the width
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.black87, width: 3.0), // Adjust the width
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.black87, width: 2.0), // Adjust the width
+                    ),
+                  ),
+                  validator: _validateEmail,
+                ),
+
+
+                SizedBox(height: 16.0),
+                Text(
+                  "Password",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.nunito(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                TextFormField(
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                  obscureText: !_isPasswordVisible,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    filled: true, // Set to true to fill the background
+                    fillColor: Colors.white, // Set the background color
+                    hintText: 'Enter your password',
+                    prefixIcon: Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0), // Set the border color and width
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.black, width: 3.0), // Adjust the width
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0), // Adjust the width
+                    ),
+                  ),
+                  validator: _validatePassword,
+                ),
+
+
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        // Handle forgot password action
+                      },
+                      child: Text(
+                        "Forgot password?",
+                        style: GoogleFonts.nunito(
+                          textStyle: TextStyle(
+                            color: Colors.deepPurple,
+                            fontSize: 14,
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Obx(() => TextFormField(
-                            obscureText: !_passwordVisible.value, // Use _passwordVisible.value to toggle password visibility
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              hintText: 'Enter your password',
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _passwordVisible.value ? Icons.visibility : Icons.visibility_off,
-                                  color: Colors.black,
-                                ),
-                                onPressed: () {
-                                  _passwordVisible.value = !_passwordVisible.value;
-                                },
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter a password';
-                              } else if (value.length < 8) {
-                                return 'Password must be at least 8 characters';
-                              } else if (!GetUtils.hasMatch(value, r'[!@#$%^&*(),.?":{}|<>]')) {
-                                return 'Password must contain at least one special character';
-                              }
-                              return null;
-                            },
-                          )),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 120.0),
+                Container(
+                  width: 330,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFD700),
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.transparent),
+                      // Transparent background
+                      elevation: MaterialStateProperty.all<double>(0),
+                      // No elevation
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                //Get.to(Passwordreminder()); // Navigate to StudentForm when the text is tapped
-                              },
-                              child: Text(
-
-                                "Forgot password?",
-                                style: TextStyle(color: Colors.deepPurple), // Set the text color to deep purple
-                              ),
-                            ),
-                          ],
-                        ),
-
-
-
-
-                        SizedBox(height: 100),
-                        Container(
-                          width: 300,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFFD700),
-                            border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                // Login functionality if form is valid
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              elevation: 0,
-                            ),
-                            child: Text(
-                              'Login as a Teacher',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        )
-
-                      ],
+                      ),
+                    ),
+                    child: Text(
+                      'Login as a Teacher',
+                      style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          letterSpacing: -0.5
+                      ),
                     ),
                   ),
                 ),
-
+                SizedBox(height: 30),
                 Row(
-
                   children: [
                     Container(
-
                       child: Text(
-                        "        Don't have an account?",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                        "                 Don't have account?",
+                        style: GoogleFonts.nunito(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -0.5
                         ),
                       ),
                     ),
@@ -201,14 +273,11 @@ class _TeacherLoginPageState extends State<TeacherForm> {
                       },
                       child: Text(
                         " Create account!",
-                        style: TextStyle(color: Colors.deepPurple),
+                        style: GoogleFonts.nunito(color: Colors.deepPurple, letterSpacing: -0.5),
                       ),
                     ),
                   ],
                 ),
-
-
-
               ],
             ),
           ),

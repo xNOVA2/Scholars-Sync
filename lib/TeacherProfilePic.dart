@@ -7,12 +7,12 @@ import 'dart:io';
 
 import 'GettingStartTeacher.dart';
 
-class ProfilePage extends StatefulWidget {
+class TeacherProfilePic extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<TeacherProfilePic> {
   // Add a variable to hold the uploaded image
   Image? _uploadedImage;
 
@@ -118,15 +118,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 width: 350,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFD700),
-                  border: Border.all(color: Colors.black),
+                  color: Colors.black,
+                  border: Border.all(color: Color(0xFFFFD700)),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => GettingStarted()),
+                      MaterialPageRoute(builder: (context) => GettingStartedTeacher()),
                     );
                   },
                   style: ButtonStyle(
@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: GoogleFonts.nunito(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                 ),
