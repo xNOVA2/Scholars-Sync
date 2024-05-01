@@ -14,6 +14,9 @@ class MyRoutes {
   static String SubjectRoute = "Subject";
   static String JustThereTeacherRoute = "/JustThereTeacher";
   static String FinishSetupRoute = "FinishSetup";
+  static String StudentDashboardRoute = "StudentDashboard";
+  static String QuizRoute = "QuizPage";
+  static String SessionRoute = "Session";
 
 
 

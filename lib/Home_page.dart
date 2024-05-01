@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scholars_sync/StuDashboard.dart';
+import 'package:scholars_sync/StudentPage.dart';
 
 import 'routes.dart';
 
@@ -10,6 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  double _padding = 6.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,67 +62,90 @@ class _HomePageState extends State<HomePage> {
 
 
               SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  Get.toNamed(MyRoutes.StudentRoute);
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Color(0xFFFFD700),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    side: BorderSide(color: Colors.black),
-                  ),
-                  elevation: 0, // Removed shadow effect
-                  padding: EdgeInsets.all(10), // Added padding
+            GestureDetector(
+              onTapDown: (_) => setState(() {
+                _padding = 0.0;
+              }),
+              onTapUp: (_) => setState(() {
+                _padding = 6.0;
+              }) ,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StudentForm()),
+                );
+              },
+              child: AnimatedContainer(
+                padding: EdgeInsets.only(bottom: _padding),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(15)
                 ),
-                child: SizedBox(
-                  width: 279,
-                  height: 30,
-                  child: Center(
-                    child: Text(
-                      'Continue as a Student',
-                      style: GoogleFonts.nunito(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                          letterSpacing: -0.5
+                duration: const Duration(milliseconds: 70),
+                child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 84,
+                      ),
+                      decoration:BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        color: Color(0xFFFFD700) ,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Text(
+                        "Continue as a Student",
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          letterSpacing: -0.5,
+                        ),
                       ),
                     ),
-                  ),
-                ),
               ),
+            ),
 
 
 
 
-              SizedBox(height: 15),
-              InkWell(
+
+
+            SizedBox(height: 15),
+              GestureDetector(
+                onTapDown: (_) => setState(() {
+                  _padding = 0.0;
+                }),
+                onTapUp: (_) => setState(() {
+                  _padding = 6.0;
+                }) ,
                 onTap: () {
                   Get.toNamed(MyRoutes.TeacherRoute);
                 },
-                child: Container(
-                  width: 300,
-                  height: 48,
+                child: AnimatedContainer(
+                  padding: EdgeInsets.only(bottom: _padding),
                   decoration: BoxDecoration(
-                    color: Colors.black,
-                    border: Border.all(color: Color(0xFFFFD700)),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black,
-                        offset: Offset(0, 3),
-                        blurRadius: 6,
-                        spreadRadius: 0,
-                      ),
-                    ],
+                      color: Color(0xFFFFD700),
+                      borderRadius: BorderRadius.circular(15)
                   ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Continue as a Teacher',
-                    style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white, letterSpacing: -0.5
+                  duration: const Duration(milliseconds: 70),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 84,
+                    ),
+                    decoration:BoxDecoration(
+                       color:  Colors.black,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      "Continue as a Teacher",
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
+                      ),
                     ),
                   ),
                 ),

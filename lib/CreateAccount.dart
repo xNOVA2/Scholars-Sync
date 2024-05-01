@@ -119,9 +119,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     Text(
                       "Create Your Account",
                       style: GoogleFonts.nunito(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
                           letterSpacing: -0.5
                       ),
                     )
@@ -157,7 +157,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     hintText: 'Enter your full name',
                     prefixIcon: Icon(Icons.person),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(color: Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -199,7 +199,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     hintText: 'Enter your email',
                     prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(color: Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -321,7 +321,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     return null;
                   },
                 ),
-               SizedBox(height: 2),
+                SizedBox(height: 2),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

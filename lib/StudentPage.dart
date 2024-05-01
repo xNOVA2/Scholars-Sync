@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scholars_sync/CreateAccount.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:scholars_sync/StuDashboard.dart';
 
 class StudentForm extends StatefulWidget {
+
   @override
   _StudentFormState createState() => _StudentFormState();
 }
@@ -13,12 +20,30 @@ class _StudentFormState extends State<StudentForm> {
   bool _isPasswordVisible = false;
 
   Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
+    // Check if both email and password fields are empty
+    if (emailController.text.isEmpty && passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Form submitted successfully')),
+        SnackBar(content: Text('Please enter email and password')),
       );
+      return;
+    }
+
+    // Validate the form
+    if (_formKey.currentState!.validate()) {
+      // Proceed with login if form validation passes
+      login(emailController.text.toString(), passwordController.text.toString());
+    } else {
+      // Form is invalid, show error messages
+      if (_validateEmail(emailController.text.toString()) != null) {
+        // If the email is invalid, show "invalid email" message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please enter a valid email')),
+        );
+      }
+      // You can remove the password validation message here
     }
   }
+
 
   String? _validateEmail(String? value) {
     if (value!.isEmpty) {
@@ -28,8 +53,12 @@ class _StudentFormState extends State<StudentForm> {
     if (!emailRegExp.hasMatch(value)) {
       return 'Please enter a valid email';
     }
+    if (!value.endsWith('.com')) {
+      return 'Please enter a valid email ';
+    }
     return null;
   }
+
 
   String? _validatePassword(String? value) {
     if (value!.isEmpty) {
@@ -62,6 +91,52 @@ class _StudentFormState extends State<StudentForm> {
     );
   }
 
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void login(String email, String password) async {
+    try {
+      // Make the API request
+      http.Response response = await post(
+        Uri.parse('https://average-bandanna-pig.cyclic.app/api/auth/login' ),
+        body: {
+          'email': email,
+          'password': password
+        },
+      );
+
+      // Check the status code of the response
+      if (response.statusCode == 400) {
+        // Login successful
+        print('Login successful');
+
+        // Navigate to another page
+        Get.to(StudentDashboard());
+      } else {
+        // Login failed, print out the status code and response body
+        print('Login failed with status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        // Show a snackbar indicating login failure
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed. Please try again.')),
+        );
+      }
+    } catch (e) {
+      // An error occurred while making the request
+      print('Error occurred during login: $e');
+
+      // Show a snackbar indicating error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again later.')),
+      );
+    }
+  }
+
+
+
+
+  double _padding = 6.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +153,7 @@ class _StudentFormState extends State<StudentForm> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(14.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -123,6 +198,7 @@ class _StudentFormState extends State<StudentForm> {
                   ),
                 ),
                 TextFormField(
+                  controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   style: TextStyle(
                     color: Colors.black,
@@ -161,6 +237,7 @@ class _StudentFormState extends State<StudentForm> {
                   ),
                 ),
                 TextFormField(
+                  controller: passwordController,
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -219,39 +296,54 @@ class _StudentFormState extends State<StudentForm> {
                   ],
                 ),
                 SizedBox(height: 120.0),
-                Container(
-                  width: 330,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFD700),
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: _submitForm,
-                    style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.transparent),
-                      // Transparent background
-                      elevation: MaterialStateProperty.all<double>(0),
-                      // No elevation
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+                GestureDetector(
+                  onTapDown: (_) => setState(() {
+                    _padding = 0.0;
+                  }),
+                  onTapUp: (_) => setState(() {
+                    _padding = 6.0;
+                  }) ,
+                  onTap: () {
+                    // Call _submitForm() to trigger form validation
+                    _submitForm();
+                    // Check if the form is valid before attempting login
+                    if (_formKey.currentState!.validate()) {
+                      // Proceed with login if form validation passes
+                      login(emailController.text.toString(), passwordController.text.toString());
+                    }
+                  },
+
+
+                  child: AnimatedContainer(
+                    padding: EdgeInsets.only(bottom: _padding),
+                    decoration: BoxDecoration(
+                        color: Colors.black ,
+                        borderRadius: BorderRadius.circular(15)
                     ),
-                    child: Text(
-                      'Login as a Student',
-                      style: GoogleFonts.nunito(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                          letterSpacing: -0.5
+                    duration: const Duration(milliseconds: 70),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 110,
+                      ),
+                      decoration:BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        color: Color(0xFFFFD700),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Text(
+                        "Login as a Student",
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          letterSpacing: -0.5,
+                        ),
                       ),
                     ),
                   ),
                 ),
+
                 SizedBox(height: 30),
                 Row(
                   children: [
@@ -259,8 +351,8 @@ class _StudentFormState extends State<StudentForm> {
                       child: Text(
                         "                 Don't have account?",
                         style: GoogleFonts.nunito(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                             letterSpacing: -0.5
                         ),
                       ),

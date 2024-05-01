@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scholars_sync/CreateAccount.dart';
-
-import 'CreateAccountTeacher.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:scholars_sync/CreateAccountTeacher.dart';
 
 class TeacherForm extends StatefulWidget {
   @override
@@ -19,8 +23,23 @@ class _TeacherFormState extends State<TeacherForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Form submitted successfully')),
       );
+    } else {
+      // If validation fails, show error messages
+      String? emailError = _validateEmail(emailController.text.toString());
+      if (emailError != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(emailError)),
+        );
+      }
+      String? passwordError = _validatePassword(passwordController.text.toString());
+      if (passwordError != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(passwordError)),
+        );
+      }
     }
   }
+
 
   String? _validateEmail(String? value) {
     if (value!.isEmpty) {
@@ -62,6 +81,29 @@ class _TeacherFormState extends State<TeacherForm> {
         borderRadius: BorderRadius.circular(10),
       ),
     );
+  }
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void login(String email, String password) async {
+    try {
+      http.Response response = await http.post(
+        Uri.parse('https://reqres.in/api/login'),
+        body: {
+          'email': email,
+          'password': password
+        },
+      );
+      if(response.statusCode == 200){
+
+        print('account created successfully');
+      }else{
+        print('failed');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -125,6 +167,7 @@ class _TeacherFormState extends State<TeacherForm> {
                   ),
                 ),
                 TextFormField(
+                  controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   style: TextStyle(
                     color: Colors.black,
@@ -163,6 +206,7 @@ class _TeacherFormState extends State<TeacherForm> {
                   ),
                 ),
                 TextFormField(
+                  controller: passwordController,
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -221,39 +265,32 @@ class _TeacherFormState extends State<TeacherForm> {
                   ],
                 ),
                 SizedBox(height: 120.0),
-                Container(
-                  width: 330,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFD700),
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: _submitForm,
-                    style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.transparent),
-                      // Transparent background
-                      elevation: MaterialStateProperty.all<double>(0),
-                      // No elevation
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+                GestureDetector(
+                  onTap: (){
+                    login(emailController.text.toString(), passwordController.text.toString());
+                  },
+                  child: Container(
+                    width: 350,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFD700),
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
-                      'Login as a Teacher',
-                      style: GoogleFonts.nunito(
+                    child: Center(
+                      child: Text(
+                        'Login as a Teacher',
+                        style: GoogleFonts.nunito(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.black,
-                          letterSpacing: -0.5
+                          letterSpacing: -0.5,
+                        ),
                       ),
                     ),
                   ),
                 ),
+
                 SizedBox(height: 30),
                 Row(
                   children: [

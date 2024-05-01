@@ -6,6 +6,7 @@ import 'package:scholars_sync/FinishSetup.dart';
 import 'package:scholars_sync/GettingStartTeacher.dart';
 import 'package:scholars_sync/GettingStarted.dart';
 import 'package:scholars_sync/JustThere.dart';
+import 'package:scholars_sync/StuDashboard.dart';
 import 'package:scholars_sync/routes.dart';
 import 'CreateAccountTeacher.dart';
 import 'JustThereT.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: MyRoutes.GettingStartedTeacherRoute, page: ()=> GettingStartedTeacher()),
         GetPage(name: MyRoutes.JustThereRoute, page: ()=> JustThere()),
         GetPage(name: MyRoutes.JustThereTeacherRoute, page: ()=> JustThereTeacher()),
+        //GetPage(name: MyRoutes.StudentDashboardRoute, page: ()=> StudentDashboard()),
         //GetPage(name: MyRoutes.SubjectRoute, page: ()=> Subject()),
         //GetPage(name: MyRoutes.FinishSetupRoute, page: ()=> FinishSetup())
 
