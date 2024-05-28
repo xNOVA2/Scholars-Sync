@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                         userController.setRole("teacher");
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => TeacherDashboard()),
+                          MaterialPageRoute(builder: (context) => TeacherForm()),
                         );
                       },
                       child: AnimatedContainer(
