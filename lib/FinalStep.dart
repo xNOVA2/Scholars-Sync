@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:scholars_sync/Home_page.dart';
+import 'package:scholars_sync/StuDashboard.dart';
+import 'package:scholars_sync/StudentPage.dart';
+import 'package:scholars_sync/user_controller.dart';
+
+import 'GetX.dart'; // Ensure this is the correct path
 
 class Subject extends StatefulWidget {
   @override
@@ -9,6 +13,7 @@ class Subject extends StatefulWidget {
 }
 
 class _SubjectState extends State<Subject> {
+  double _padding = 6.0;
   bool isSelected1 = false;
   bool isSelected2 = false;
   bool isSelected3 = false;
@@ -16,464 +21,294 @@ class _SubjectState extends State<Subject> {
   bool isSelected5 = false;
   bool isSelected6 = false;
 
+  final UserController userController = Get.find(); // Get the UserController instance
+
+  List<String> selectedSubjects = [];
+
+  void updateSubjectSelection(String subject, bool isSelected) {
+    if (isSelected) {
+      selectedSubjects.add(subject);
+    } else {
+      selectedSubjects.remove(subject);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFCFFD4),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        title: Text(""),
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 26),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Get.back();
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "  Final Step",
+                            style: GoogleFonts.nunito(
+                              fontSize: constraints.maxWidth < 600 ? 24 : 25,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "   Select your subject and teachers",
+                            style: GoogleFonts.nunito(
+                              fontSize: constraints.maxWidth < 600 ? 16 : 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildSubjectCard(
+                        constraints,
+                        isSelected1,
+                        'assets/images/math.png',
+                        'maths',
+                        'Sir Ahtisham Ali',
+                        onTap: () {
+                          setState(() {
+                            isSelected1 = !isSelected1;
+                            updateSubjectSelection('Math', isSelected1);
+                          });
+                        },
+                      ),
+                      buildSubjectCard(
+                        constraints,
+                        isSelected2,
+                        'assets/images/English.png',
+                        'english',
+                        'Ms Mehrunisa',
+                        onTap: () {
+                          setState(() {
+                            isSelected2 = !isSelected2;
+                            updateSubjectSelection('English', isSelected2);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildSubjectCard(
+                        constraints,
+                        isSelected3,
+                        'assets/images/Islam.png',
+                        'Islamiat',
+                        'Ms Shabana',
+                        onTap: () {
+                          setState(() {
+                            isSelected3 = !isSelected3;
+                            updateSubjectSelection('Islamiat', isSelected3);
+                          });
+                        },
+                      ),
+                      buildSubjectCard(
+                        constraints,
+                        isSelected4,
+                        'assets/images/SS.png',
+                        'Social Studies',
+                        'Sir Qasim',
+                        onTap: () {
+                          setState(() {
+                            isSelected4 = !isSelected4;
+                            updateSubjectSelection('Social Studies', isSelected4);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildSubjectCard(
+                        constraints,
+                        isSelected5,
+                        'assets/images/Science.png',
+                        'General Science',
+                        'No name',
+                        onTap: () {
+                          setState(() {
+                            isSelected5 = !isSelected5;
+                            updateSubjectSelection('General Science', isSelected5);
+                          });
+                        },
+                      ),
+                      buildSubjectCard(
+                        constraints,
+                        isSelected6,
+                        'assets/images/Bio.png',
+                        'Biology',
+                        'No name',
+                        onTap: () {
+                          setState(() {
+                            isSelected6 = !isSelected6;
+                            updateSubjectSelection('Biology', isSelected6);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  SizedBox(height: 40),
+                ],
+              ),
+            ),
+          );
+        },
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Flexible(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "  Final Step",
-                        style: GoogleFonts.nunito(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+      floatingActionButton: GestureDetector(
+        onTapDown: (_) => setState(() {
+          _padding = 0.0;
+        }),
+        onTapUp: (_) => setState(() {
+          _padding = 6.0;
+        }),
+        onTap: () {
+          userController.setSubjects(selectedSubjects); // Save selected subjects
+          userController.Register().then((_) {
+            Get.snackbar('Success', 'Account created successfully');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => StudentForm()),
+            );
+          }).catchError((error) {
+            Get.snackbar('Error', 'Failed to create account');
+          });
+        },
+        child: AnimatedContainer(
+          padding: EdgeInsets.only(bottom: _padding),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          duration: const Duration(milliseconds: 70),
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+              horizontal: screenWidth * 0.21,
+            ),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              color: Color(0xFFFFD700),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              "                 Finish                 ",
+              style: GoogleFonts.nunito(
+                fontSize: screenWidth * 0.046,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                letterSpacing: -0.5,
               ),
-              SizedBox(height: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Flexible(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "    Select your subject and teachers",
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected1 = !isSelected1;
-                      });
-                    },
-                    child: Container(
-                      width: 159,
-                      height: 187,
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Fill color with white
-                        border: Border.all(
-                          color: isSelected1 ? Colors.green : Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              Positioned(
-                                top: 4, // Adjust the top position of the check icon
-                                left: 4, // Adjust the left position of the check icon
-                                child: Icon(
-                                  Icons.check,
-                                  size: 16, // Adjust the size of the check icon
-                                  color: isSelected1 ? Colors.green : Colors.transparent,
-                                ),
-                              ),
-                              Image.asset(
-                                'assets/images/math.png',
-                                width: 100,
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Math', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Sir Ahtisham Ali', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected2 = !isSelected2;
-                      });
-                    },
-                    child: Container(
-                      width: 159,
-                      height: 187,
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Fill color with white
-                        border: Border.all(
-                          color: isSelected2 ? Colors.green : Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              Positioned(
-                                top: 4, // Adjust the top position of the check icon
-                                left: 4, // Adjust the left position of the check icon
-                                child: Icon(
-                                  Icons.check,
-                                  size: 16, // Adjust the size of the check icon
-                                  color: isSelected2 ? Colors.green : Colors.transparent,
-                                ),
-                              ),
-                              Image.asset(
-                                'assets/images/English.png', // Replace with your image path
-                                width: 100,
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'English', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Ms Mehrunisa', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected3 = !isSelected3;
-                      });
-                    },
-                    child: Container(
-                      width: 159,
-                      height: 187,
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Fill color with white
-                        border: Border.all(
-                          color: isSelected3 ? Colors.green : Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              Positioned(
-                                top: 4, // Adjust the top position of the check icon
-                                left: 4, // Adjust the left position of the check icon
-                                child: Icon(
-                                  Icons.check,
-                                  size: 16, // Adjust the size of the check icon
-                                  color: isSelected3 ? Colors.green : Colors.transparent,
-                                ),
-                              ),
-                              Image.asset(
-                                'assets/images/Islam.png',
-                                width: 100,
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Islamiat', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Ms Shabana', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected4 = !isSelected4;
-                      });
-                    },
-                    child: Container(
-                      width: 159,
-                      height: 187,
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Fill color with white
-                        border: Border.all(
-                          color: isSelected4 ? Colors.green : Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              Positioned(
-                                top: 4, // Adjust the top position of the check icon
-                                left: 4, // Adjust the left position of the check icon
-                                child: Icon(
-                                  Icons.check,
-                                  size: 16, // Adjust the size of the check icon
-                                  color: isSelected4 ? Colors.green : Colors.transparent,
-                                ),
-                              ),
-                              Image.asset(
-                                'assets/images/SS.png', // Replace with your image path
-                                width: 100,
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Social Studies', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Sir Qasim', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected5 = !isSelected5;
-                      });
-                    },
-                    child: Container(
-                      width: 159,
-                      height: 187,
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Fill color with white
-                        border: Border.all(
-                          color: isSelected5 ? Colors.green : Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              Positioned(
-                                top: 4, // Adjust the top position of the check icon
-                                left: 4, // Adjust the left position of the check icon
-                                child: Icon(
-                                  Icons.check,
-                                  size: 16, // Adjust the size of the check icon
-                                  color: isSelected5 ? Colors.green : Colors.transparent,
-                                ),
-                              ),
-                              Image.asset(
-                                'assets/images/Science.png',
-                                width: 100,
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'General Science',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'No name', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected6 = !isSelected6;
-                      });
-                    },
-                    child: Container(
-                      width: 159,
-                      height: 187,
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Fill color with white
-                        border: Border.all(
-                          color: isSelected6 ? Colors.green : Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              Positioned(
-                                top: 4, // Adjust the top position of the check icon
-                                left: 4, // Adjust the left position of the check icon
-                                child: Icon(
-                                  Icons.check,
-                                  size: 16, // Adjust the size of the check icon
-                                  color: isSelected6 ? Colors.green : Colors.transparent,
-                                ),
-                              ),
-                              Image.asset(
-                                'assets/images/Bio.png', // Replace with your image path
-                                width: 100,
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Biology', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'No name ', // Your subject name
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30),
-              Container(
-                width: 330,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFD700),
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent), // Transparent background
-                    elevation: MaterialStateProperty.all<double>(0), // No elevation
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    'Finish',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 40),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  Widget buildSubjectCard(BoxConstraints constraints, bool isSelected, String imagePath, String subjectName, String teacherName, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: constraints.maxWidth < 600 ? 150 : 200,
+        height: constraints.maxWidth < 600 ? 185 : 220,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: isSelected ? Colors.green : Colors.black,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                Positioned(
+                  top: 4,
+                  left: 4,
+                  child: Icon(
+                    Icons.check,
+                    size: 16,
+                    color: isSelected ? Colors.green : Colors.transparent,
+                  ),
+                ),
+                Image.asset(
+                  imagePath,
+                  width: constraints.maxWidth < 600 ? 100 : 120,
+                  height: constraints.maxWidth < 600 ? 100 : 120,
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Text(
+              subjectName,
+              style: GoogleFonts.nunito(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              teacherName,
+              style: GoogleFonts.nunito(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Subject(),
+  ));
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scholars_sync/JustThereT.dart';
 import 'package:scholars_sync/routes.dart';
+
+import 'GetX.dart';
 
 class GettingStartedTeacher extends StatefulWidget {
   @override
@@ -9,70 +12,69 @@ class GettingStartedTeacher extends StatefulWidget {
 }
 
 class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
-  // List of schools
   List<String> _schools = [
     "School A",
     "School B",
     "School C",
-    // Add more schools as needed
   ];
-
+  final UserController userController = Get.find();
+  String? school;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFCFFD4),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        title: Text(""),
-      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(height: 4),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+
+                ],
+              ),
               SizedBox(height: 30),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Flexible(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "  Getting Started",
-                        style: GoogleFonts.nunito(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.5                        ),
+                    child: Text(
+                      " Getting Started",
+                      style: GoogleFonts.nunito(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.5,
                       ),
                     ),
                   ),
                 ],
               ),
+              SizedBox(height: 1),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Flexible(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "    Select your school",
-                        style: GoogleFonts.nunito(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                        ),
+                    child: Text(
+                      "  Select your school",
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 6),
+              SizedBox(height: 14),
               Container(
                 alignment: Alignment.center,
                 constraints: BoxConstraints(
@@ -81,50 +83,49 @@ class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
                 ),
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: "    Search School",
-                    contentPadding: EdgeInsets.only(bottom: 8), // Adjusting position of the hint text
+                    hintText: "Search School",
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     suffixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(17),
                       borderSide: BorderSide(
-                        // Customizing border thickness
                         width: 2.0,
                       ),
                     ),
-                    // Customizing border color when focused
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(17),
                       borderSide: BorderSide(
-                        color: Colors.blue, // Example color
+                        color: Colors.black,
                         width: 2.0,
                       ),
                     ),
-                    // Customizing border color when enabled but not focused
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(17),
                       borderSide: BorderSide(
-                        color: Colors.black, // Example color
+                        color: Colors.black,
                         width: 2.0,
                       ),
                     ),
                   ),
                 ),
               ),
-
               SizedBox(height: 35),
               GestureDetector(
                 onTap: () {
-                  // Handle onTap
-                  Get.toNamed(MyRoutes.JustThereTeacherRoute);
+                  setState(() {
+                    school = 'Beaconhouse School System';
+                  });
+                  userController.setSchool(school!);
+                  Get.to(JustThereTeacher());
                 },
                 child: Container(
                   width: 310,
-                  height: 65,
+                  height: 70,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
                       color: Colors.black,
-                      width: 2.0, // Customizing border thickness
+                      width: 2.0,
                     ),
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -150,14 +151,13 @@ class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
                   ),
                 ),
               ),
-
               SizedBox(height: 10),
               Container(
                 width: 310,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.black, width: 2.0), // Adding borders
+                  border: Border.all(color: Colors.black, width: 2.0),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
@@ -165,11 +165,11 @@ class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
                     title: Row(
                       children: [
                         Image.asset(
-                          'assets/images/dots.png', // Path to your image asset
-                          width: 45, // Adjust size as needed
-                          height: 45, // Adjust size as needed
+                          'assets/images/dots.png',
+                          width: 45,
+                          height: 45,
                         ),
-                        SizedBox(width: 8), // Add space between image and text
+                        SizedBox(width: 8),
                         Text(
                           "Other School",
                           style: GoogleFonts.nunito(
@@ -183,6 +183,7 @@ class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
                     children: _schools.map((school) {
                       return GestureDetector(
                         onTap: () {
+                          userController.setSchool(school!);
                           Get.toNamed(MyRoutes.JustThereTeacherRoute);
                         },
                         child: ListTile(
@@ -193,8 +194,6 @@ class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
                   ),
                 ),
               ),
-
-
             ],
           ),
         ),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:scholars_sync/GettingStarted.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import 'GetX.dart';
 import 'GettingStartTeacher.dart';
+import 'GettingStarted.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -15,30 +16,38 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   // Add a variable to hold the uploaded image
   Image? _uploadedImage;
+  double _padding = 6.0;
+  double _scaleFactor = 1.0;
+
+  final UserController userController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFCFFD4),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        title: Text(""),
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // Align widgets to the left
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
               Text(
                 "Upload Your Picture",
-                textAlign: TextAlign.left, // Align text to the left
+                textAlign: TextAlign.left,
                 style: GoogleFonts.nunito(
                   fontSize: 27,
                   fontWeight: FontWeight.w900,
@@ -46,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Text(
                 "Please Enter Your Login Credentials",
-                textAlign: TextAlign.left, // Align text to the left
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -54,8 +63,19 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(height: 60),
               GestureDetector(
                 onTap: () {
-                  // Show dialog to select image or navigate to image preview screen
+                  // Show dialog to select image
                   _showImagePickerDialog();
+                },
+                onScaleStart: (details) {
+                  // Add your logic here when scaling starts
+                },
+                onScaleUpdate: (details) {
+                  setState(() {
+                    _scaleFactor = details.scale.clamp(1.0, 3.0);
+                  });
+                },
+                onScaleEnd: (details) {
+                  // Add your logic here when scaling ends
                 },
                 child: Stack(
                   children: [
@@ -65,12 +85,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
-                        border: Border.all(color: Colors.black87, width: 2.0), // Add missing comma
+                        border: Border.all(color: Colors.black87, width: 2.0),
                       ),
                       child: _uploadedImage != null
-                          ? CircleAvatar(
-                        radius: 70,
-                        backgroundImage: _uploadedImage!.image,
+                          ? Transform.scale(
+                        scale: _scaleFactor,
+                        child: CircleAvatar(
+                          radius: 70,
+                          backgroundImage: _uploadedImage!.image,
+                        ),
                       )
                           : Icon(
                         Icons.person,
@@ -78,7 +101,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.black,
                       ),
                     ),
-
                     Positioned(
                       bottom: 0,
                       right: 90,
@@ -93,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     if (_uploadedImage != null)
                       Positioned(
-                        bottom:40,
+                        bottom: 40,
                         right: 65,
                         child: GestureDetector(
                           onTap: () {
@@ -114,38 +136,42 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 300),
-              Container(
-                width: 350,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFD700),
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GettingStarted()),
-                    );
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Colors.transparent), // Transparent background
-                    elevation:
-                    MaterialStateProperty.all<double>(0), // No elevation
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+              GestureDetector(
+                onTapDown: (_) => setState(() {
+                  _padding = 0.0;
+                }),
+                onTapUp: (_) => setState(() {
+                  _padding = 6.0;
+                }),
+                onTap: () {
+                  userController.setProfilePicture('path/to/profile/picture');
+                  Get.to(GettingStarted());
+                },
+                child: AnimatedContainer(
+                  padding: EdgeInsets.only(bottom: _padding),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Text(
-                    'Continue',
-                    style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
+                  duration: const Duration(milliseconds: 70),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: screenHeight * 0.02,
+                      horizontal: screenWidth * 0.21,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      color: Color(0xFFFFD700),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      "              Continue             ",
+                      style: GoogleFonts.nunito(
+                        fontSize: screenWidth * 0.046,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                        letterSpacing: -0.5,
+                      ),
                     ),
                   ),
                 ),

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scholars_sync/Home_page.dart';
+import 'package:scholars_sync/TeacherDashboard.dart';
 import 'package:scholars_sync/routes.dart';
+import 'GetX.dart';
 import 'JustThereT.dart';
+import 'TeacherPage.dart';
+import 'package:http/http.dart' as http;
 
 class FinishSetup extends StatefulWidget {
   @override
@@ -11,6 +15,8 @@ class FinishSetup extends StatefulWidget {
 }
 
 class _FinishState extends State<FinishSetup> {
+  double _padding = 6.0;
+
   bool isSelected1 = false;
   bool isSelected2 = false;
   bool isSelected3 = false;
@@ -18,8 +24,23 @@ class _FinishState extends State<FinishSetup> {
   bool isSelected5 = false;
   bool isSelected6 = false;
 
+  List<String> getSelectedClasses() {
+    List<String> selectedClasses = [];
+    if (isSelected1) selectedClasses.add('Class 1');
+    if (isSelected2) selectedClasses.add('Class 2');
+    if (isSelected3) selectedClasses.add('Class 3');
+    if (isSelected4) selectedClasses.add('Class 4');
+    if (isSelected5) selectedClasses.add('Class 5');
+    if (isSelected6) selectedClasses.add('Class 6');
+    return selectedClasses;
+  }
+  final UserController userController = Get.find(); // Get the UserController instance
+
+
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
       appBar: AppBar(
@@ -34,7 +55,7 @@ class _FinishState extends State<FinishSetup> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(0),
+          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -99,7 +120,7 @@ class _FinishState extends State<FinishSetup> {
                       });
                     },
                     child: Container(
-                      width: 159,
+                      width: screenSize.width * 0.4,
                       height: 49,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -107,26 +128,15 @@ class _FinishState extends State<FinishSetup> {
                           color: isSelected1 ? Colors.black : Colors.black,
                           width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Class 1',
-                              style: GoogleFonts.nunito(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(left: 5),
                             child: Container(
-                              width: 24,
+                              width: 22,
                               height: 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -149,6 +159,17 @@ class _FinishState extends State<FinishSetup> {
                               ),
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 50),
+                            child: Text(
+                              'Class 1',
+                              style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -160,7 +181,7 @@ class _FinishState extends State<FinishSetup> {
                       });
                     },
                     child: Container(
-                      width: 159,
+                      width: screenSize.width * 0.4,
                       height: 49,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -168,26 +189,15 @@ class _FinishState extends State<FinishSetup> {
                           color: isSelected2 ? Colors.black : Colors.black,
                           width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Class 2',
-                              style: GoogleFonts.nunito(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(left: 5),
                             child: Container(
-                              width: 24,
+                              width: 22,
                               height: 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -205,8 +215,19 @@ class _FinishState extends State<FinishSetup> {
                               )
                                   : Icon(
                                 Icons.check_box_outline_blank,
-                                size: 10,
+                                size: 18,
                                 color: Colors.transparent,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 50),
+                            child: Text(
+                              'Class 2',
+                              style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -217,7 +238,7 @@ class _FinishState extends State<FinishSetup> {
                 ],
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 10),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -229,7 +250,7 @@ class _FinishState extends State<FinishSetup> {
                       });
                     },
                     child: Container(
-                      width: 159,
+                      width: screenSize.width * 0.4,
                       height: 49,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -237,26 +258,15 @@ class _FinishState extends State<FinishSetup> {
                           color: isSelected3 ? Colors.black : Colors.black,
                           width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Class 3',
-                              style: GoogleFonts.nunito(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(left: 5),
                             child: Container(
-                              width: 24,
+                              width: 22,
                               height: 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -279,6 +289,17 @@ class _FinishState extends State<FinishSetup> {
                               ),
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 50),
+                            child: Text(
+                              'Class 3',
+                              style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -290,7 +311,7 @@ class _FinishState extends State<FinishSetup> {
                       });
                     },
                     child: Container(
-                      width: 159,
+                      width: screenSize.width * 0.4,
                       height: 49,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -298,26 +319,15 @@ class _FinishState extends State<FinishSetup> {
                           color: isSelected4 ? Colors.black : Colors.black,
                           width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Class 4',
-                              style: GoogleFonts.nunito(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(left: 5),
                             child: Container(
-                              width: 24,
+                              width: 22,
                               height: 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -335,8 +345,19 @@ class _FinishState extends State<FinishSetup> {
                               )
                                   : Icon(
                                 Icons.check_box_outline_blank,
-                                size: 10,
+                                size: 18,
                                 color: Colors.transparent,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 50),
+                            child: Text(
+                              'Class 4',
+                              style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -347,7 +368,7 @@ class _FinishState extends State<FinishSetup> {
                 ],
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 10),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -359,7 +380,7 @@ class _FinishState extends State<FinishSetup> {
                       });
                     },
                     child: Container(
-                      width: 159,
+                      width: screenSize.width * 0.4,
                       height: 49,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -367,26 +388,15 @@ class _FinishState extends State<FinishSetup> {
                           color: isSelected5 ? Colors.black : Colors.black,
                           width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Class 5',
-                              style: GoogleFonts.nunito(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(left: 5),
                             child: Container(
-                              width: 24,
+                              width: 22,
                               height: 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -396,7 +406,7 @@ class _FinishState extends State<FinishSetup> {
                                   width: 2,
                                 ),
                               ),
-                              child: isSelected5
+                              child: isSelected1
                                   ? Icon(
                                 Icons.check,
                                 size: 18,
@@ -406,6 +416,17 @@ class _FinishState extends State<FinishSetup> {
                                 Icons.check_box_outline_blank,
                                 size: 18,
                                 color: Colors.transparent,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 50),
+                            child: Text(
+                              'Class 5',
+                              style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -420,7 +441,7 @@ class _FinishState extends State<FinishSetup> {
                       });
                     },
                     child: Container(
-                      width: 159,
+                      width: screenSize.width * 0.4,
                       height: 49,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -428,26 +449,15 @@ class _FinishState extends State<FinishSetup> {
                           color: isSelected6 ? Colors.black : Colors.black,
                           width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Class 6',
-                              style: GoogleFonts.nunito(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(left: 5),
                             child: Container(
-                              width: 24,
+                              width: 22,
                               height: 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -465,8 +475,19 @@ class _FinishState extends State<FinishSetup> {
                               )
                                   : Icon(
                                 Icons.check_box_outline_blank,
-                                size: 10,
+                                size: 18,
                                 color: Colors.transparent,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 50),
+                            child: Text(
+                              'Class 6',
+                              style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -474,42 +495,56 @@ class _FinishState extends State<FinishSetup> {
                       ),
                     ),
                   ),
+
                 ],
               ),
-              SizedBox(height: 200),
-              Container(
-                width: 330,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  border: Border.all(color: Color(0xFFFFD700)),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
+
+
+              SizedBox(height: 240),
+              GestureDetector(
+                onTapDown: (_) => setState(() {
+                  _padding = 0.0;
+                }),
+                onTapUp: (_) => setState(() {
+                  _padding = 6.0;
+                }),
+                onTap: () {
+                  List<String> selectedClasses = getSelectedClasses();
+                  userController.setClass(selectedClasses);
+                  userController.Register().then((_) {
+                    Get.snackbar('Success', 'Account created successfully');
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(builder: (context) => TeacherForm()),
                     );
-                  },
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.transparent),
-                    // Transparent background
-                    elevation: MaterialStateProperty.all<double>(0),
-                    // No elevation
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                  }).catchError((error) {
+                    Get.snackbar('Error', 'Failed to create account');
+                  });
+                },
+                child: AnimatedContainer(
+                  padding: EdgeInsets.only(bottom: _padding),
+                  decoration: BoxDecoration(
+                      color: Color(0xFFFFD700),
+                      borderRadius: BorderRadius.circular(15)),
+                  duration: const Duration(milliseconds: 70),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 84,
                     ),
-                  ),
-                  child: Text(
-                    'Finish',
-                    style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      "              Finish             ",
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
+                      ),
                     ),
                   ),
                 ),
@@ -522,3 +557,4 @@ class _FinishState extends State<FinishSetup> {
     );
   }
 }
+

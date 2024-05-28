@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scholars_sync/PicturePage.dart';
 import 'package:scholars_sync/StudentPage.dart';
 import 'package:scholars_sync/routes.dart';
+import 'GetX.dart';
+
 
 import 'TeacherPage.dart';
-
+import 'TeacherProfilePic.dart';
 
 class CreateAccountPage extends StatefulWidget {
   @override
-  _CreateAccountPageState createState() => _CreateAccountPageState();
+  _CreateAccountState createState() => _CreateAccountState();
 }
 
-class _CreateAccountPageState extends State<CreateAccountPage> {
+class _CreateAccountState extends State<CreateAccountPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   late TextEditingController _passwordController;
+  double _padding = 6.0;
 
   @override
   void initState() {
@@ -26,7 +30,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   bool isChecked = false;
 
-  void printMessage(){
+  void printMessage() {
     print("User Accepted");
   }
 
@@ -37,12 +41,20 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   Future<void> _submitForm() async {
+    print("Submitting form...");
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Account created successfully')),
+      print("Form is valid. Navigating...");
+      if (context != null) {
+        ScaffoldMessenger.of(context!).showSnackBar(
+          const SnackBar(content: Text('Account created successfully')),
+        );
+      }
+      Navigator.push(
+        context!,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
       );
-      Get.toNamed(MyRoutes.ProfilePageRoute);
-
+    } else {
+      print("Form validation failed.");
     }
   }
 
@@ -90,45 +102,45 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       ),
     );
   }
-
+  final UserController userController = Get.find();
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFCFFD4),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(""),
-      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(14.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 25.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      "Create Your Account",
-                      style: GoogleFonts.nunito(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.black,
-                          letterSpacing: -0.5
-                      ),
-                    )
+                    IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                   ],
                 ),
+                SizedBox(height: 10.0),
                 Text(
-                  " Please enter your login credentials",
+                  " Create Your Account",
+                  style: GoogleFonts.nunito(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                Text(
+                  "  Please enter your login credentials",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.nunito(
                     fontSize: 14,
@@ -160,22 +172,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(color: Colors.black),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 3.0), // Adjust the width
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 2.0), // Adjust the width
-                    ),
                   ),
-
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your full name';
                     }
                     return null;
                   },
+                  onSaved: (value) => userController.setName(value!),
                 ),
                 SizedBox(height: 16.0),
                 Text(
@@ -202,17 +206,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(color: Colors.black),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 3.0), // Adjust the width
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 2.0), // Adjust the width
-                    ),
                   ),
-
                   validator: _validateEmail,
+                  onSaved: (value) => userController.setEmail(value!),
                 ),
                 SizedBox(height: 16.0),
                 Text(
@@ -235,11 +231,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     filled: true,
                     fillColor: Colors.white,
                     hintText: 'Enter your password',
-                    prefixIcon: Icon(Icons.lock), // Here is the prefix icon for password
+                    prefixIcon: Icon(Icons.lock),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.black54, // Adjust the icon color as needed
+                        color: Colors.black54,
                       ),
                       onPressed: () {
                         setState(() {
@@ -251,20 +247,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(color: Colors.black, width: 2.0),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 3.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 2.0),
-                    ),
                   ),
                   validator: _validatePassword,
+                  onSaved: (value) => userController.setPassword(value!),
                 ),
-
-
-
                 SizedBox(height: 16.0),
                 Text(
                   " Confirm Password",
@@ -301,15 +287,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 2.0), // Adjust the width
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 3.0), // Adjust the width
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black, width: 2.0), // Adjust the width
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
                     ),
                   ),
                   validator: (value) {
@@ -327,8 +305,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // Add your logic here for when the text is tapped
-                        isChecked ? printMessage : null;
+                        isChecked ? printMessage() : null;
                       },
                       child: Text(
                         "   Accept our terms and conditions",
@@ -339,45 +316,61 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 60.0),
-                Container(
-                  width: 330,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFD700),
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: _submitForm,
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        Colors.transparent,
-                      ),
-                      elevation: MaterialStateProperty.all<double>(0),
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+                GestureDetector(
+                  onTapDown: (_) => setState(() {
+                    _padding = 0.0;
+                  }),
+                  onTapUp: (_) => setState(() {
+                    _padding = 6.0;
+                  }),
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      Get.to(ProfilePage());
+                    }
+                  },
+                  child: AnimatedContainer(
+                    padding: EdgeInsets.only(bottom: _padding),
+                    decoration: BoxDecoration(
+                      color: Colors.black ,
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Text(
-                      'Continue',
-                      style: GoogleFonts.nunito(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
+                    duration: const Duration(milliseconds: 70),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Container(
+                          width: constraints.maxWidth * 1,
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.02,
+                            horizontal: screenWidth * 0.04,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFFFD700),
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Text(
+                            "Continue",
+                            style: GoogleFonts.nunito(
+                              fontSize: screenWidth * 0.045,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                              letterSpacing: -0.5,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 10),
                 Row(
                   children: [
                     Container(
                       child: Text(
-                        "               Already have an account?",
+                        "            Already have an account?",
                         style: GoogleFonts.nunito(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,

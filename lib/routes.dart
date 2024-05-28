@@ -17,7 +17,28 @@ class MyRoutes {
   static String StudentDashboardRoute = "StudentDashboard";
   static String QuizRoute = "QuizPage";
   static String SessionRoute = "Session";
-
+  static String TeacherDashboardRoute = "TeacherDashboard";
+  static String VerificationRoute = " Verification";
+  static String ResetPasswordRoute = "ResetPs";
+  static String LiveClassRoute = "LiveClass";
+  static String StartLiveRoute = "StartLive";
+  static String SessionsRequestRoute = "SessionsRequest";
+  static String ChangePasswrodRoute = "ChangePassword";
+  static String RewardsRoute = "Rewards";
+  static String MyProfileRoute = "MyProfile";
+  static String EditProfileRoute = "EditProfile";
+  static String TeacherProfile = "TeacherProfile";
+  static String EditTeacherProfileRoute = "EditTeacherProfile";
+  static String LeaderboardRoute = "Leaderboard";
+  static String AvailabilityRoute = "Availability";
+  static String SlotsRoute = "Slots";
+  static String EmailVerify = "EmailVerify";
+  static String MathsFaculty = "MathsFaculty";
+  static String EnglishFaculty = "EnglishFaculty" ;
+  static String IslamicStudiesFaculty = "IslamicStudiesFaculty";
+  static String BiologyFaculty = "BiologyFaculty";
+  static String ScienceFaculty = "ScienceFaculty" ;
+  static String SocialStudiesFaculty = "SocialStudiesFaculty";
 
 
 }

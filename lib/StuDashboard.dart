@@ -5,8 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:scholars_sync/Home_page.dart';
 import 'package:scholars_sync/QuizPage.dart';
 import 'package:scholars_sync/routes.dart';
-
+import 'GetX.dart';
 import 'BookSession.dart';
+import 'ChangePassword.dart';
+import 'ForgotPd.dart';
+import 'MyProfile.dart';
+import 'Rewards.dart';
+import 'StudentPage.dart';
+import 'package:scholars_sync/user_controller.dart';
+
 
 class StudentDashboard extends StatefulWidget {
   @override
@@ -14,9 +21,10 @@ class StudentDashboard extends StatefulWidget {
 }
 
 class _StudentDashboardState extends State<StudentDashboard> {
+  double _padding = 6.0;
+
   final double appBarPadding = 20.0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   final List<Map<String, String>> imageInfo = [
     {
       'path': 'assets/images/math.png',
@@ -54,6 +62,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final UserController userController = Get.find();
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -70,9 +79,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // Align items to the start and end
             children: [
-              // Widget to position the first image exactly in the middle
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -85,16 +92,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
                   ],
                 ),
               ),
-              // Widget to position the alarm image in the corner with the notification icon
+              SizedBox(width: 10),
               Row(
                 children: [
                   Image.asset(
-                    'assets/images/alarm.png',
+                    'assets/images/kiing.png',
                     width: 40,
-                    height: 40,
+                    height: 60,
                   ),
-                  SizedBox(width: 0),
-                  // Add space between alarm and notification icon
                   IconButton(
                     icon: Icon(Icons.notifications, color: Colors.black),
                     onPressed: () {
@@ -106,7 +111,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ],
           ),
         ),
-
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +128,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '   Ali Mujtaba!',
+                  '   ${userController.userModel.value.name}',
                   style: GoogleFonts.nunito(
                     fontSize: 24,
                     fontWeight: FontWeight.w900,
@@ -135,93 +139,88 @@ class _StudentDashboardState extends State<StudentDashboard> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Add onTap action for the image
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Session()),
                   ); // Navigate to quiz page
                 },
                 child: Container(
-                  width: 500,
-                  // Adjust width as needed
-                  height: 130,
-                  // Adjust height as needed
+                  width: MediaQuery.of(context).size.width,
+                  height: 0.18 * MediaQuery.of(context).size.height,
                   alignment: Alignment.topCenter,
-                  // Align the image to the top center
                   child: Image.asset(
                     'assets/images/session.png',
-                    width: 600, // Adjust width as needed
-                    height: 200, // Adjust height as needed
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              Center(
-                child: Container(
-                  width: 330,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      // Add onTap action for the container
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Session()),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: Image.asset(
-                            'assets/images/Frame.png',
-                            // Replace 'example.png' with your image asset path
-                            width: 40,
-                            height: 40,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                      width: 0.93 * MediaQuery.of(context).size.width,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Session()),
+                          );
+                        },
+                        child: Row(
                           children: [
-                            Row(
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: Image.asset(
+                                'assets/images/Frame.png',
+                                width: 40,
+                                height: 40,
+                              ),
+                            ),
+
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      ' Upcoming one on one session',
+                                      style: GoogleFonts.nunito(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.keyboard_arrow_right,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
                                 Text(
-                                  ' Upcoming one on one session',
+                                  ' 00:00 - 00:00 . Subject',
                                   style: GoogleFonts.nunito(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
                                   ),
                                 ),
-                                Icon(
-                                  Icons.keyboard_arrow_right,
-                                  size: 20,
-                                  color: Colors.white,
-                                ),
                               ],
-                            ),
-
-                            Text(
-                              ' 00:00 - 00:00 . Subject',
-                              style: GoogleFonts.nunito(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
+            ),
+          ),
+
               SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerLeft,
@@ -237,10 +236,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
               ),
               SizedBox(height: 4.0),
               Container(
-                height: 160, // Adjust the height as needed
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                height: 150,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: imageInfo.length,
@@ -255,7 +251,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         setState(() {
                           tappedIndex = null;
                         });
-                        // Handle onTap for each subject image
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => QuizPage()),
@@ -270,7 +265,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         duration: Duration(milliseconds: 200),
                         curve: Curves.easeInOut,
                         width: 120,
-                        // Adjust the width as needed
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -291,7 +285,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               setState(() {
                                 tappedIndex = null;
                               });
-                              // Handle onTap for each subject image
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -310,11 +303,10 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                 children: [
                                   Image.asset(
                                     imageInfo[index]['path']!,
-                                    width: 40, // Adjust the width as needed
-                                    height: 40, // Adjust the height as needed
+                                    width: 40,
+                                    height: 40,
                                   ),
                                   SizedBox(height: 5),
-                                  // Adjust the spacing as needed
                                   Text(
                                     imageInfo[index]['title']!,
                                     style: GoogleFonts.nunito(fontSize: 14,
@@ -330,7 +322,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           ),
                         ),
                       ),
-
                     );
                   },
                 ),
@@ -351,18 +342,17 @@ class _StudentDashboardState extends State<StudentDashboard> {
               SizedBox(height: 15),
               GestureDetector(
                 onTap: () {
-                  // Handle onTap
                   Get.toNamed(MyRoutes.JustThereRoute);
                 },
                 child: Center(
                   child: Container(
-                    width: 350,
+                    width: MediaQuery.of(context).size.width * 0.90,
                     height: 73,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
                         color: Colors.black,
-                        width: 2.0, // Customizing border thickness
+                        width: 2.0,
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -382,7 +372,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           ),
                         ),
                         SizedBox(width: 10),
-                        // Adjust spacing between image and text
                         Expanded(
                           flex: 3,
                           child: Column(
@@ -408,7 +397,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                 ],
                               ),
                               SizedBox(height: 4),
-                              // Adjust spacing between lines
                               Text(
                                 '00:00 - 00:00',
                                 style: GoogleFonts.nunito(
@@ -427,99 +415,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               padding: const EdgeInsets.all(8.0),
                               child: Image.asset(
                                 'assets/images/math.png',
-                                // Add your image asset path here
-                                width: 40,
-                                height: 40,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-
-              GestureDetector(
-                onTap: () {
-                  // Handle onTap
-                  Get.toNamed(MyRoutes.JustThereRoute);
-                },
-                child: Center(
-                  child: Container(
-                    width: 350,
-                    height: 73,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 2.0, // Customizing border thickness
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/Frame.png',
-                                width: 40,
-                                height: 40,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        // Adjust spacing between image and text
-                        Expanded(
-                          flex: 3,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 12),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Data',
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.keyboard_arrow_right,
-                                    size: 20,
-                                    color: Colors.black,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 4),
-                              // Adjust spacing between lines
-                              Text(
-                                '00:00 - 00:00',
-                                style: GoogleFonts.nunito(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/math.png',
-                                // Add your image asset path here
                                 width: 40,
                                 height: 40,
                               ),
@@ -534,18 +429,17 @@ class _StudentDashboardState extends State<StudentDashboard> {
               SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  // Handle onTap
                   Get.toNamed(MyRoutes.JustThereRoute);
                 },
                 child: Center(
                   child: Container(
-                    width: 350,
+                    width: MediaQuery.of(context).size.width * 0.90,
                     height: 73,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
                         color: Colors.black,
-                        width: 2.0, // Customizing border thickness
+                        width: 2.0,
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -565,7 +459,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           ),
                         ),
                         SizedBox(width: 10),
-                        // Adjust spacing between image and text
                         Expanded(
                           flex: 3,
                           child: Column(
@@ -591,7 +484,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                 ],
                               ),
                               SizedBox(height: 4),
-                              // Adjust spacing between lines
                               Text(
                                 '00:00 - 00:00',
                                 style: GoogleFonts.nunito(
@@ -610,7 +502,93 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               padding: const EdgeInsets.all(8.0),
                               child: Image.asset(
                                 'assets/images/math.png',
-                                // Add your image asset path here
+                                width: 40,
+                                height: 40,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(MyRoutes.JustThereRoute);
+                },
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.90,
+                    height: 73,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'assets/images/Frame.png',
+                                width: 40,
+                                height: 40,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 12),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Data',
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.keyboard_arrow_right,
+                                    size: 20,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                '00:00 - 00:00',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'assets/images/math.png',
                                 width: 40,
                                 height: 40,
                               ),
@@ -626,45 +604,257 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ],
           ),
         ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              DrawerHeader(
-                child: Text(
-                  'Drawer Header',
-                  style: TextStyle(color: Colors.white),
+        drawer: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(40), // Adjust the radius for top right corner
+            bottomRight: Radius.circular(40), // Adjust the radius for bottom right corner
+          ),
+          child: Drawer(
+
+              child: Container(
+
+                 color: Color(0xFFFCFFD4),
+
+                child: ListView(
+              padding: EdgeInsets.zero,
+
+              children: [
+                AppBar(
+                  automaticallyImplyLeading: false, // Remove the default leading icon
+                  elevation: 0, // Remove the shadow
+                  backgroundColor: Colors.transparent, // Set background color to transparent
+                  title: Text(''), // Empty title to center the exit icon
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.highlight_off), // Use the close icon for exiting
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close the drawer
+                      },
+                    ),
+                  ],
                 ),
-                decoration: BoxDecoration(
-                  color: Color(0xFFFCFFD4),
+                SizedBox(height: 20),
+
+                Row(
+                  children: [
+
+                    SizedBox(width: 10), // Adjust spacing between image and column
+
+                    Image.asset(
+                      'assets/images/Kings.png', // Replace 'assets/images/your_image.png' with the path to your image
+                      width: 100, // Adjust width as needed
+                      height: 160, // Adjust height as needed
+                    ),
+                    SizedBox(width: 10), // Adjust spacing between image and column
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${userController.userModel.value.name}',
+                          style: GoogleFonts.nunito(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          'Kings League',
+                          style: GoogleFonts.nunito(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SizedBox(height: 10), // Adjust spacing between text and button
+                        GestureDetector(
+                          onTapDown: (_) => setState(() {
+                            _padding = 0.0;
+                          }),
+                          onTapUp: (_) => setState(() {
+                            _padding = 4.0;
+                          }),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyProfile()),
+                            );
+                          },
+                          child: AnimatedContainer(
+                            padding: EdgeInsets.only(bottom: _padding),
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(12)),
+                            duration: const Duration(milliseconds: 70),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 19,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFFFD700),
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                "View Profile",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-              ListTile(
-                title: Text('Profile view'),
-                onTap: () {
-                  // Add onTap action for drawer item 1
-                },
-              ),
-              ListTile(
-                title: Text('Settings'),
-                onTap: () {
-                  // Add onTap action for drawer item 2
-                },
-              ),
-              ListTile(
-                title: Text('Log Out'),
-                onTap: () {
-                  // Add onTap action for drawer item 3
-                  Get.to(HomePage());
-                },
-              ),
-            ],
+
+                SizedBox(height: 0),
+
+                ListTile(
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/home.png', // Replace 'assets/images/home.png' with the path to your image
+                        width: 30, // Adjust width as needed
+                        height: 30, // Adjust height as needed
+                      ),
+                      SizedBox(width: 4), // Adjust spacing between image and text
+                      Text(
+                        'Home',
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/quiz.png', // Replace 'assets/images/home.png' with the path to your image
+                        width: 30, // Adjust width as needed
+                        height: 30, // Adjust height as needed
+                      ),
+                      SizedBox(width: 4), // Adjust spacing between image and text
+                      Text(
+                        'My Quizes',
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );                },
+                ),
+                ListTile(
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/badge.png', // Replace 'assets/images/home.png' with the path to your image
+                        width: 30, // Adjust width as needed
+                        height: 30, // Adjust height as needed
+                      ),
+                      SizedBox(width: 4), // Adjust spacing between image and text
+                      Text(
+                        'Badges and Rewards',
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Rewards()),
+                    );
+                    },
+                ),
+                ListTile(
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/lock.png', // Replace 'assets/images/home.png' with the path to your image
+                        width: 30, // Adjust width as needed
+                        height: 30, // Adjust height as needed
+                      ),
+                      SizedBox(width: 4), // Adjust spacing between image and text
+                      Text(
+                        'Change Password',
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangePassword()),
+                    );                },
+                ),
+                ListTile(
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/logout.png', // Replace 'assets/images/home.png' with the path to your image
+                        width: 30, // Adjust width as needed
+                        height: 30, // Adjust height as needed
+                      ),
+                      SizedBox(width: 4), // Adjust spacing between image and text
+                      Text(
+                        'Log Out',
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
+                ),
+              ],
+
+            ),
+
+          ),
+
           ),
         ),
-
       ),
     );
   }
+
   Future<bool> _onWillPop() {
     return showDialog(
       context: context,
