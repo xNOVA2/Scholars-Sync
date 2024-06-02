@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:scholars_sync/CreateAccount.dart';
 import 'package:scholars_sync/EnglishFaculty.dart';
@@ -42,7 +43,11 @@ import 'splashscreen.dart';
 void main() {
   // Initialize GetX dependencies
   Get.put(UserController()); // Immediate registration
-  runApp(MyApp());
+  runApp(
+      ProviderScope(
+        child: MyApp(),
+      ),
+  );
 }
 
 
