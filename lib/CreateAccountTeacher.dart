@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scholars_sync/riverpods/register_teacher_pod.dart';
 import 'GetX.dart';
 import 'TeacherPage.dart';
 import 'TeacherProfilePic.dart';
 
-class CreateAccountTeacher extends StatefulWidget {
+class CreateAccountTeacher extends ConsumerStatefulWidget {
+  const CreateAccountTeacher({super.key});
+
   @override
-  _CreateAccountTeacherState createState() => _CreateAccountTeacherState();
+  ConsumerState createState() => _CreateAccountTeacherState();
 }
 
-class _CreateAccountTeacherState extends State<CreateAccountTeacher> {
+class _CreateAccountTeacherState extends ConsumerState<CreateAccountTeacher> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  bool passwordMatch=false;
   late TextEditingController _passwordController;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
   double _padding = 6.0;
 
   @override
@@ -35,7 +42,8 @@ class _CreateAccountTeacherState extends State<CreateAccountTeacher> {
     super.dispose();
   }
 
-  Future<void> _submitForm() async {
+  Future<void> _submitForm(WidgetRef ref) async {
+    final register = ref.read(registerPod);
     print("Submitting form...");
     if (_formKey.currentState!.validate()) {
       print("Form is valid. Navigating...");
@@ -44,6 +52,9 @@ class _CreateAccountTeacherState extends State<CreateAccountTeacher> {
           const SnackBar(content: Text('Account created successfully')),
         );
       }
+      register.name = _nameController.text;
+      register.email = _emailController.text;
+      register.password = _passwordController.text;
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => TeacherProfilePic()),
@@ -103,7 +114,6 @@ class _CreateAccountTeacherState extends State<CreateAccountTeacher> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
       body: SingleChildScrollView(
@@ -148,6 +158,7 @@ class _CreateAccountTeacherState extends State<CreateAccountTeacher> {
                   ),
                 ),
                 TextFormField(
+                  controller: _nameController,
                   keyboardType: TextInputType.name,
                   style: TextStyle(color: Colors.black),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -180,6 +191,7 @@ class _CreateAccountTeacherState extends State<CreateAccountTeacher> {
                   ),
                 ),
                 TextFormField(
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   style: TextStyle(color: Colors.black),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -301,7 +313,7 @@ class _CreateAccountTeacherState extends State<CreateAccountTeacher> {
                     _padding = 6.0;
                   }),
                   onTap: () {
-                    _submitForm();
+                    _submitForm(ref);
                   },
                   child: AnimatedContainer(
                     padding: EdgeInsets.only(bottom: _padding),

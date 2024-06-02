@@ -1,31 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scholars_sync/StuDashboard.dart';
 import 'package:scholars_sync/StudentPage.dart';
 import 'package:scholars_sync/TeacherDashboard.dart';
+import 'package:scholars_sync/riverpods/register_teacher_pod.dart';
 
 import 'GetX.dart';
 import 'TeacherPage.dart';
 import 'routes.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
+
   @override
-  _HomePageState createState() => _HomePageState();
+  ConsumerState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   double _padding = 6.0;
   final UserController userController = Get.find();
-
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
+    final register = ref.watch(registerPod);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -82,6 +85,7 @@ class _HomePageState extends State<HomePage> {
                       }),
                       onTap: () {
                         userController.setRole("student");
+                        register.role = "student";
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => StudentForm()),
@@ -126,6 +130,7 @@ class _HomePageState extends State<HomePage> {
                       }),
                       onTap: () {
                         userController.setRole("teacher");
+                        register.role="teacher";
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => TeacherForm()),

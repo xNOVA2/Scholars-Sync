@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scholars_sync/riverpods/register_teacher_pod.dart';
 import 'FinishSetup.dart';
 import 'GetX.dart';
 import 'user_controller.dart';
 
-class JustThereTeacher extends StatefulWidget {
+class JustThereTeacher extends ConsumerStatefulWidget {
+  const JustThereTeacher({super.key});
+
   @override
-  _JustThereTeacherState createState() => _JustThereTeacherState();
+  ConsumerState createState() => _JustThereTeacherState();
 }
 
 class Subject {
@@ -17,7 +21,7 @@ class Subject {
   Subject({required this.name, required this.imagePath});
 }
 
-class _JustThereTeacherState extends State<JustThereTeacher> {
+class _JustThereTeacherState extends ConsumerState<JustThereTeacher> {
   double _padding = 6.0;
   Subject? selectedSubject;
   TextEditingController controller = new TextEditingController();
@@ -40,7 +44,7 @@ class _JustThereTeacherState extends State<JustThereTeacher> {
     final Size screenSize = MediaQuery.of(context).size;
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
+    final register = ref.watch(registerPod);
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
       body: SingleChildScrollView(
@@ -207,7 +211,8 @@ class _JustThereTeacherState extends State<JustThereTeacher> {
                                           showSubjects = false;
                                         });
                                         userController.setSubject(
-                                            subjectNames[index].name); // Save selected subject
+                                            subjectNames[index].name);// Save selected subject
+                                        register.subjects = subjectNames[index].name;
                                       },
                                       child: ListTile(
                                         leading: Image.asset(
@@ -246,6 +251,7 @@ class _JustThereTeacherState extends State<JustThereTeacher> {
                 onTap: () {
                   userController.setTeacherID(
                       _teacherIDController.text); // Save teacher ID
+                  register.rollNumber=_teacherIDController.text;
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => FinishSetup()),
@@ -289,11 +295,11 @@ class _JustThereTeacherState extends State<JustThereTeacher> {
   }
 }
 
-void main() {
-  // Initialize GetX dependencies
-  Get.put(UserController());
-
-  runApp(MaterialApp(
-    home: JustThereTeacher(),
-  ));
-}
+// void main() {
+//   // Initialize GetX dependencies
+//   Get.put(UserController());
+//
+//   runApp(MaterialApp(
+//     home: JustThereTeacher(),
+//   ));
+// }

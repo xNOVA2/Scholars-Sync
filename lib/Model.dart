@@ -2,7 +2,7 @@ class UserModel {
   String? name;
   String? email;
   String? password;
-  List<String>? classNo; // Change from String to List<String>
+  List<int>? classNo; // Change from String to List<String>
   String? profilePicture;
   String? school;
   String? role;

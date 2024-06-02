@@ -26,7 +26,7 @@ class UserController extends GetxController {
   }
 
 
-  void setClass(List<String> classNo) {
+  void setClass(List<int> classNo) {
     userModel.update((user) {
       user?.classNo = classNo;
     });

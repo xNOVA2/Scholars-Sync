@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scholars_sync/JustThereT.dart';
+import 'package:scholars_sync/riverpods/register_teacher_pod.dart';
 import 'package:scholars_sync/routes.dart';
 
 import 'GetX.dart';
 
-class GettingStartedTeacher extends StatefulWidget {
+class GettingStartedTeacher extends ConsumerStatefulWidget {
+  const GettingStartedTeacher({super.key});
+
   @override
-  _GettingStartedTeacherState createState() => _GettingStartedTeacherState();
+  ConsumerState createState() => _GettingStartedTeacherState();
 }
 
-class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
+class _GettingStartedTeacherState extends ConsumerState<GettingStartedTeacher> {
   List<String> _schools = [
     "School A",
     "School B",
@@ -19,8 +23,10 @@ class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
   ];
   final UserController userController = Get.find();
   String? school;
+
   @override
   Widget build(BuildContext context) {
+    final register = ref.watch(registerPod);
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
       body: SingleChildScrollView(
@@ -116,6 +122,9 @@ class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
                     school = 'Beaconhouse School System';
                   });
                   userController.setSchool(school!);
+                  if(school != null){
+                    register.school = school!;
+                  }
                   Get.to(JustThereTeacher());
                 },
                 child: Container(
@@ -184,6 +193,7 @@ class _GettingStartedTeacherState extends State<GettingStartedTeacher> {
                       return GestureDetector(
                         onTap: () {
                           userController.setSchool(school!);
+                          register.school = school;
                           Get.toNamed(MyRoutes.JustThereTeacherRoute);
                         },
                         child: ListTile(

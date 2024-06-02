@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scholars_sync/GettingStarted.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:scholars_sync/riverpods/register_teacher_pod.dart';
 import 'dart:io';
 
 import 'GetX.dart';
 import 'GettingStartTeacher.dart';
 
-class TeacherProfilePic extends StatefulWidget {
+class TeacherProfilePic extends ConsumerStatefulWidget {
+  const TeacherProfilePic({super.key});
+
   @override
-  _TeacherProfilePicState createState() => _TeacherProfilePicState();
+  ConsumerState createState() => _TeacherProfilePicState();
 }
 
-class _TeacherProfilePicState extends State<TeacherProfilePic> {
+class _TeacherProfilePicState extends ConsumerState<TeacherProfilePic> {
   // Add a variable to hold the uploaded image
   Image? _uploadedImage;
   double _padding = 6.0;
@@ -57,7 +61,7 @@ class _TeacherProfilePicState extends State<TeacherProfilePic> {
               GestureDetector(
                 onTap: () {
                   // Show dialog to select image or navigate to image preview screen
-                  _showImagePickerDialog();
+                  _showImagePickerDialog(ref);
                 },
                 child: Stack(
                   children: [
@@ -164,7 +168,7 @@ class _TeacherProfilePicState extends State<TeacherProfilePic> {
   }
 
   // Function to show dialog for image picker
-  void _showImagePickerDialog() {
+  void _showImagePickerDialog(WidgetRef ref) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -176,7 +180,7 @@ class _TeacherProfilePicState extends State<TeacherProfilePic> {
                 GestureDetector(
                   child: Text("Gallery"),
                   onTap: () {
-                    _getImage(ImageSource.gallery);
+                    _getImage(ImageSource.gallery, ref);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -184,7 +188,7 @@ class _TeacherProfilePicState extends State<TeacherProfilePic> {
                 GestureDetector(
                   child: Text("Camera"),
                   onTap: () {
-                    _getImage(ImageSource.camera);
+                    _getImage(ImageSource.camera, ref);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -197,10 +201,13 @@ class _TeacherProfilePicState extends State<TeacherProfilePic> {
   }
 
   // Function to pick image
-  Future<void> _getImage(ImageSource source) async {
+  Future<void> _getImage(ImageSource source,WidgetRef ref) async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: source);
 
+    if (pickedFile != null) {
+      ref.read(registerPod).setProfileImage(pickedFile.path);
+    }
     setState(() {
       if (pickedFile != null) {
         _uploadedImage = Image.file(File(pickedFile.path));

@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scholars_sync/Home_page.dart';
 import 'package:scholars_sync/TeacherDashboard.dart';
+import 'package:scholars_sync/riverpods/register_teacher_pod.dart';
 import 'package:scholars_sync/routes.dart';
 import 'GetX.dart';
 import 'JustThereT.dart';
 import 'TeacherPage.dart';
 import 'package:http/http.dart' as http;
 
-class FinishSetup extends StatefulWidget {
+class FinishSetup extends ConsumerStatefulWidget {
+  const FinishSetup({super.key});
+
   @override
-  _FinishState createState() => _FinishState();
+  ConsumerState createState() => _FinishSetupState();
 }
 
-class _FinishState extends State<FinishSetup> {
+class _FinishSetupState extends ConsumerState<FinishSetup> {
   double _padding = 6.0;
 
   bool isSelected1 = false;
@@ -24,14 +28,14 @@ class _FinishState extends State<FinishSetup> {
   bool isSelected5 = false;
   bool isSelected6 = false;
 
-  List<String> getSelectedClasses() {
-    List<String> selectedClasses = [];
-    if (isSelected1) selectedClasses.add('Class 1');
-    if (isSelected2) selectedClasses.add('Class 2');
-    if (isSelected3) selectedClasses.add('Class 3');
-    if (isSelected4) selectedClasses.add('Class 4');
-    if (isSelected5) selectedClasses.add('Class 5');
-    if (isSelected6) selectedClasses.add('Class 6');
+  List<int> getSelectedClasses() {
+    List<int> selectedClasses = [];
+    if (isSelected1) selectedClasses.add(1);
+    if (isSelected2) selectedClasses.add(2);
+    if (isSelected3) selectedClasses.add(3);
+    if (isSelected4) selectedClasses.add(4);
+    if (isSelected5) selectedClasses.add(5);
+    if (isSelected6) selectedClasses.add(6);
     return selectedClasses;
   }
   final UserController userController = Get.find(); // Get the UserController instance
@@ -40,7 +44,7 @@ class _FinishState extends State<FinishSetup> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-
+    final register = ref.watch(registerPod);
     return Scaffold(
       backgroundColor: Color(0xFFFCFFD4),
       appBar: AppBar(
@@ -509,9 +513,10 @@ class _FinishState extends State<FinishSetup> {
                   _padding = 6.0;
                 }),
                 onTap: () {
-                  List<String> selectedClasses = getSelectedClasses();
+                  List<int> selectedClasses = getSelectedClasses();
                   userController.setClass(selectedClasses);
-                  userController.Register().then((_) {
+                  register.classes = selectedClasses;
+                  register.registerUser(context).then((_) {
                     Get.snackbar('Success', 'Account created successfully');
                     Navigator.push(
                       context,
@@ -520,6 +525,15 @@ class _FinishState extends State<FinishSetup> {
                   }).catchError((error) {
                     Get.snackbar('Error', 'Failed to create account');
                   });
+                  //userController.Register().then((_) {
+                  //                     Get.snackbar('Success', 'Account created successfully');
+                  //                     Navigator.push(
+                  //                       context,
+                  //                       MaterialPageRoute(builder: (context) => TeacherForm()),
+                  //                     );
+                  //                   }).catchError((error) {
+                  //                     Get.snackbar('Error', 'Failed to create account');
+                  //                   });
                 },
                 child: AnimatedContainer(
                   padding: EdgeInsets.only(bottom: _padding),

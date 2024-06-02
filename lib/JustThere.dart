@@ -16,7 +16,7 @@ class _JustThereState extends State<JustThere> {
   double _padding = 6.0;
   final _formKey = GlobalKey<FormState>();
 
-  List<String> classList = ["2", "3", "4", "5", "6"];
+  List<int> classList = [2, 3, 4, 5, 6];
   bool displayClassList = false;
 
   final UserController userController = Get.find(); // Get the UserController instance
@@ -166,13 +166,13 @@ class _JustThereState extends State<JustThere> {
                                               return GestureDetector(
                                                 onTap: () {
                                                   setState(() {
-                                                    controller.text = classList[index];
+                                                    controller.text = classList[index].toString();
                                                     displayClassList = false;
                                                   });
                                                   userController.setClass([classList[index]]); // Save selected class as a list
                                                 },
                                                 child: ListTile(
-                                                  title: Text(classList[index]),
+                                                  title: Text(classList[index].toString()),
                                                 ),
                                               );
                                             }),
